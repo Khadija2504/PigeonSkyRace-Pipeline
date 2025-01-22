@@ -1,0 +1,48 @@
+<div class="register-container">
+    <h2>Add pigeon</h2>
+    <form [formGroup]="pigeonForm" (ngSubmit)="addPigeon()" method="post">
+
+      <div class="form-group">
+        <label for="age">age</label>
+        <input id="age" type="number" formControlName="age">
+        <div class="error" *ngIf="pigeonForm.get('age')?.invalid && pigeonForm.get('age')?.touched">
+          age is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" formControlName="name">
+        <div class="error" *ngIf="pigeonForm.get('name')?.invalid && pigeonForm.get('name')?.touched">
+          Name is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="gender">gender</label>
+        <select name="gender" id="gender" formControlName="gender">
+            <option value="Female">Female</option>
+            <option value="Male">male</option>
+        </select>
+        <div class="error" *ngIf="pigeonForm.get('gender')?.invalid && pigeonForm.get('gender')?.touched">
+          Valid gender is required and it must be 'male' or 'female'.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="color">color</label>
+        <input id="color" type="text" formControlName="color">
+        <div class="error" *ngIf="pigeonForm.get('color')?.invalid && pigeonForm.get('color')?.touched">
+          valid color is required.
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="pigeonForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Adding new pigeon...' : 'Add pigeon' }}
+      </button>
+  
+      <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+      <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    </form>
+  </div>
+  

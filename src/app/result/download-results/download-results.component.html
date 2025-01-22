@@ -1,0 +1,7 @@
+<div class="export-results-container">
+    <h1>Export Results</h1>
+
+    <button (click)="exportResults()" [disabled]="loading" class="export-button">
+        {{ loading ? 'Exporting...' : 'Export Results as PDF' }}
+    </button>
+</div>

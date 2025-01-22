@@ -1,0 +1,24 @@
+<nav *ngIf="!isLoggedIn">
+  <a routerLink="/auth/login">Login</a>
+  <a routerLink="/auth/register">Register</a>
+</nav>
+
+<nav *ngIf="isLoggedIn">
+  <ng-container *ngIf="hasRole('breeder')">
+    <a routerLink="/pigeon/addPigeon">Add Pigeon</a>
+    <a routerLink="/results/display-results">Display Results</a>
+    <a routerLink="/pigeon/pigeonsList">Pigeons List</a>
+  </ng-container>
+
+  <ng-container *ngIf="hasRole('organizer')">
+    <a routerLink="/season/addSeason">Add Season</a>
+    <a routerLink="/competition/competitions-list">Competitions List</a>
+    <a routerLink="/competition/create-competition">Create Competition</a>
+    <a routerLink="/competition/assign-pigeon">Assign Pigeon</a>
+    <a routerLink="/results/upload-arrival-data">Upload Arrival Data</a>
+  </ng-container>
+
+  <a (click)="logout()">Logout</a>
+</nav>
+
+<router-outlet></router-outlet>

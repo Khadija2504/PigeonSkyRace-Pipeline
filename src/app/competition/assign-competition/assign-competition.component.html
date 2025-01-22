@@ -1,0 +1,52 @@
+<div class="container">
+    <h2>Assign Pigeon to Competition</h2>
+  
+    <form [formGroup]="assignPigeonForm" (ngSubmit)="assignPigeon()">
+      <div class="form-group">
+        <label for="badge">Pigeon Badge:</label>
+        <input
+          id="badge"
+          formControlName="badge"
+          type="text"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': assignPigeonForm.get('badge')?.touched && assignPigeonForm.get('badge')?.invalid }"
+          placeholder="Enter pigeon badge"
+        />
+        <small *ngIf="assignPigeonForm.get('badge')?.touched && assignPigeonForm.get('badge')?.invalid" class="text-danger">
+          Pigeon badge is required (minimum 3 characters).
+        </small>
+      </div>
+  
+      <div class="form-group">
+        <label for="competition">Select Competition:</label>
+        <select
+          id="competition"
+          formControlName="competitionId"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': assignPigeonForm.get('competitionId')?.touched && assignPigeonForm.get('competitionId')?.invalid }"
+        >
+          <option value="" disabled selected>Select a competition</option>
+          <ng-container *ngFor="let competition of competitions">
+            <option *ngIf="competition.isOpen" [value]="competition.id">
+                {{ competition.name }} ({{ competition.season.name}})
+            </option>
+          </ng-container>
+        </select>
+        <small *ngIf="assignPigeonForm.get('competitionId')?.touched && assignPigeonForm.get('competitionId')?.invalid" class="text-danger">
+          Please select a competition.
+        </small>
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || assignPigeonForm.invalid">
+        Assign Pigeon
+      </button>
+  
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
+  

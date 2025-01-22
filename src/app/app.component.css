@@ -1,0 +1,17 @@
+nav {
+    background-color: #007bff;
+    padding: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+nav a {
+    color: white;
+    margin-right: 10px;
+    text-decoration: none;
+}
+nav a:hover {
+    text-decoration: underline;
+}
+  
