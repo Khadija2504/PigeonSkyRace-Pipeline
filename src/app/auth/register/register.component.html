@@ -1,0 +1,68 @@
+<div class="register-container">
+    <h2>Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="register()" method="post">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" type="text" formControlName="username">
+        <div class="error" *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+          Username is required (min 3 characters).
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" formControlName="name">
+        <div class="error" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+          Name is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email">
+        <div class="error" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          Valid email is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password">
+        <div class="error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          Password must be at least 6 characters.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword" type="password" formControlName="confirmPassword">
+        <div class="error" *ngIf="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched">
+          Passwords do not match.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="latitude">Latitude</label>
+        <input id="latitude" type="text" formControlName="latitude">
+        <div class="error" *ngIf="registerForm.get('latitude')?.invalid && registerForm.get('latitude')?.touched">
+          Valid latitude is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="longitude">Longitude</label>
+        <input id="longitude" type="text" formControlName="longitude">
+        <div class="error" *ngIf="registerForm.get('longitude')?.invalid && registerForm.get('longitude')?.touched">
+          Valid longitude is required.
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="registerForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Registering...' : 'Register' }}
+      </button>
+  
+      <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+      <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    </form>
+  </div>
+  

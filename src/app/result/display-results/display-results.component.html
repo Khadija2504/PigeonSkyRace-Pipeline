@@ -1,0 +1,41 @@
+<div class="result-container">
+    <h1>Results</h1>
+
+    <app-download-results>download results</app-download-results>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  
+    <table *ngIf="results.length > 0; else noResults" class="result-table">
+      <thead>
+        <tr>
+          <th>Points</th>
+          <th>Speed (m/s)</th>
+          <th>Ranking</th>
+          <th>Distance (km)</th>
+          <th>Flight Time (h)</th>
+          <th>Arrival Date</th>
+          <th>Pigeon</th>
+          <th>Competition</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let result of results">
+          <td>{{ result.points }}</td>
+          <td>{{ result.speed | number: '1.2-2' }}</td>
+          <td>{{ result.ranking }}</td>
+          <td>{{ result.distance | number: '1.2-2' }}</td>
+          <td>{{ result.flightTime | number: '1.2-2' }}</td>
+          <td>{{ result.arrivalDate | date: 'short' }}</td>
+          <td>{{ result.pigeon?.name || 'N/A' }}</td>
+          <td>{{ result.competition?.name || 'N/A' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <ng-template #noResults>
+      <p>No results available.</p>
+    </ng-template>
+  </div>
+  

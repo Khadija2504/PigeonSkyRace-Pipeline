@@ -1,0 +1,139 @@
+<div class="container mt-5">
+<h2 class="text-center mb-4">Create Competition</h2>
+<form [formGroup]="competitionForm" (ngSubmit)="createCompetition()" class="border p-4 rounded shadow-sm bg-light">
+    
+    <div class="mb-3" *ngIf="!isLoading">
+        <label for="season" class="form-label">Season</label>
+        <select
+          id="season"
+          formControlName="saisonName"
+          class="form-select"
+          required
+        >
+          <option *ngFor="let season of seasons" [value]="season.name">
+            {{ season.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            competitionForm.get('saisonName')?.invalid &&
+            competitionForm.get('saisonName')?.touched
+          "
+          class="text-danger"
+        >
+          <small>Season is required.</small>
+        </div>
+      </div>
+
+    <div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input 
+        id="name"
+        type="text"
+        class="form-control"
+        formControlName="name"
+        placeholder="Enter competition name"
+    />
+    <div *ngIf="competitionForm.get('name')?.invalid && competitionForm.get('name')?.touched" class="text-danger">
+        <small *ngIf="competitionForm.get('name')?.hasError('required')">Name is required.</small>
+        <small *ngIf="competitionForm.get('name')?.hasError('minlength')">Minimum 2 characters required.</small>
+        <small *ngIf="competitionForm.get('name')?.hasError('maxlength')">Maximum 50 characters allowed.</small>
+    </div>
+    </div>
+
+    <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea 
+        id="description" 
+        class="form-control" 
+        formControlName="description" 
+        placeholder="Enter competition description"
+        rows="3"
+    ></textarea>
+    <div *ngIf="competitionForm.get('description')?.invalid && competitionForm.get('description')?.touched" class="text-danger">
+        <small>Description is required.</small>
+    </div>
+    </div>
+
+    <div class="mb-3">
+    <label for="distance" class="form-label">Distance</label>
+    <input 
+        id="distance" 
+        type="text" 
+        class="form-control" 
+        formControlName="distance" 
+        placeholder="Enter distance (e.g., 5km or 300m)"
+    />
+    <div *ngIf="competitionForm.get('distance')?.invalid && competitionForm.get('distance')?.touched" class="text-danger">
+        <small *ngIf="competitionForm.get('distance')?.hasError('required')">Distance is required.</small>
+        <small *ngIf="competitionForm.get('distance')?.hasError('pattern')">Invalid format. Use numbers followed by 'km' or 'm'.</small>
+    </div>
+    </div>
+
+    <div class="mb-3">
+    <label for="date" class="form-label">Date</label>
+    <input 
+        id="date" 
+        type="datetime-local" 
+        class="form-control" 
+        formControlName="date"
+    />
+    <div *ngIf="competitionForm.get('date')?.invalid && competitionForm.get('date')?.touched" class="text-danger">
+        <small>Date is required.</small>
+    </div>
+    </div>
+
+    <div class="mb-3">
+    <label for="latitude" class="form-label">Latitude</label>
+    <input 
+        id="latitude" 
+        type="text" 
+        class="form-control" 
+        formControlName="latitude" 
+        placeholder="Enter latitude (e.g., 48.8566)"
+    />
+    <div *ngIf="competitionForm.get('latitude')?.invalid && competitionForm.get('latitude')?.touched" class="text-danger">
+        <small *ngIf="competitionForm.get('latitude')?.hasError('required')">Latitude is required.</small>
+        <small *ngIf="competitionForm.get('latitude')?.hasError('pattern')">Invalid latitude format.</small>
+    </div>
+    </div>
+
+    <div class="mb-3">
+    <label for="longitude" class="form-label">Longitude</label>
+    <input 
+        id="longitude" 
+        type="text" 
+        class="form-control" 
+        formControlName="longitude" 
+        placeholder="Enter longitude (e.g., 2.3522)"
+    />
+    <div *ngIf="competitionForm.get('longitude')?.invalid && competitionForm.get('longitude')?.touched" class="text-danger">
+        <small *ngIf="competitionForm.get('longitude')?.hasError('required')">Longitude is required.</small>
+        <small *ngIf="competitionForm.get('longitude')?.hasError('pattern')">Invalid longitude format.</small>
+    </div>
+    </div>
+
+    <!-- Type -->
+    <div class="mb-3">
+    <label for="type" class="form-label">Type</label>
+    <select 
+        id="type" 
+        class="form-select" 
+        formControlName="type"
+    >
+        <option value="" disabled selected>Select competition type</option>
+        <option value="VITESSE">VITESSE</option>
+        <option value="DEMI_FOND">DEMI_FOND</option>
+        <option value="FOND">FOND</option>
+    </select>
+    <div *ngIf="competitionForm.get('type')?.invalid && competitionForm.get('type')?.touched" class="text-danger">
+        <small>Type is required.</small>
+    </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+    <button type="submit" class="btn btn-primary w-50" [disabled]="competitionForm.invalid">Submit</button>
+    </div>
+
+</form>
+</div>

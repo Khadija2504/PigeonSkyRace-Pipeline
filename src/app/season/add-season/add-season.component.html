@@ -1,0 +1,31 @@
+<div class="register-container">
+    <h2>Add pigeon</h2>
+    <form [formGroup]="seasonForm" (ngSubmit)="addSeason()" method="post">
+
+      <div class="form-group">
+        <label for="name">name</label>
+        <input id="name" type="text" formControlName="name">
+        <div class="error" *ngIf="seasonForm.get('name')?.invalid && seasonForm.get('name')?.touched">
+          date is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="date">date</label>
+        <input id="date" type="datetime-local" formControlName="date">
+        <small class="error" *ngIf="seasonForm.get('date')?.hasError('required')">Date is required.</small>
+        <small class="error" *ngIf="seasonForm.get('date')?.hasError('futureOrPresent')">Date must be in the present or future.</small>
+        <div  *ngIf="seasonForm.get('date')?.invalid && seasonForm.get('date')?.touched">
+          Date is required.
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="seasonForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Adding new pigeon...' : 'Add pigeon' }}
+      </button>
+  
+      <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+      <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    </form>
+  </div>
+  

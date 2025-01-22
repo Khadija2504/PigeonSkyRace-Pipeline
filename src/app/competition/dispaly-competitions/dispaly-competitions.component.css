@@ -1,0 +1,63 @@
+.competition-container {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .competition-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .competition-table th,
+  .competition-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .competition-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .competition-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .competition-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .competition-table .open {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .competition-table .closed {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .loading {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+  }
+  
+  .error {
+    text-align: center;
+    font-size: 18px;
+    color: red;
+    margin-top: 20px;
+  }
+  
