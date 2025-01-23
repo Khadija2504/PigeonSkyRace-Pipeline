@@ -1,16 +1,80 @@
 import { TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { PigeonService } from './pigeon.service';
 
 describe('PigeonService', () => {
   let service: PigeonService;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [PigeonService],
+    });
     service = TestBed.inject(PigeonService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+    localStorage.clear();
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  describe('getToken', () => {
+    it('should return token from localStorage', () => {
+      localStorage.setItem('token', JSON.stringify({ token: 'mock-jwt-token' }));
+      expect(service.getToken()).toEqual('{"token":"mock-jwt-token"}');
+    });
+
+    it('should return null if no token is present', () => {
+      localStorage.removeItem('token');
+      expect(service.getToken()).toBeNull();
+    });
+  });
+
+  describe('isLoggedIn', () => {
+    it('should return true if token exists', () => {
+      localStorage.setItem('token', JSON.stringify({ token: 'mock-jwt-token' }));
+      expect(service.isLoggedIn()).toBeTrue();
+    });
+
+    it('should return false if no token exists', () => {
+      localStorage.removeItem('token');
+      expect(service.isLoggedIn()).toBeFalse();
+    });
+  });
+
+  describe('addPigeon', () => {
+    it('should send a POST request to add a pigeon', () => {
+      const pigeonData = { name: 'Pigeon 1', breed: 'Breed A' };
+      const mockResponse = { message: 'Pigeon successfully added.' };
+
+      service.addPigeon(pigeonData).subscribe(response => {
+        expect(response).toEqual(mockResponse);
+      });
+
+      const req = httpMock.expectOne('http://localhost:8900/api/breeder/addPigeon');
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(pigeonData);
+      req.flush(mockResponse);
+    });
+  });
+
+  describe('getPigeons', () => {
+    it('should send a GET request to fetch all pigeons', () => {
+      const mockPigeons = [{ id: 1, name: 'Pigeon 1', breed: 'Breed A' }];
+
+      service.getPigeons().subscribe(pigeons => {
+        expect(pigeons).toEqual(mockPigeons);
+      });
+
+      const req = httpMock.expectOne('http://localhost:8900/api/breeder/getAllPigeons');
+      expect(req.request.method).toBe('GET');
+      req.flush(mockPigeons);
+    });
   });
 });
