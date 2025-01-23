@@ -24,7 +24,7 @@ export class LoginComponent {
   }
 
   login() {
-    if(this.loginForm.invalid) return;
+    if (this.loginForm.invalid) return;
 
     this.isSubmitting = true;
     this.errorMessage = null;
@@ -33,26 +33,26 @@ export class LoginComponent {
     const userData = this.loginForm.value;
     this.authService.login(userData).subscribe({
       next: (Response) => {
-        console.log(Response);
-        localStorage.setItem('token', JSON.stringify(Response));
-        const userRole = this.authService.getUserRole();
-        this.successMessage = 'Login successful! Redirecting...';
-        setTimeout(() => {
-          if (userRole === 'breeder') {
-            this.router.navigate(['/pigeon/pigeonsList']);
-          } else if(userRole === 'organizer') {
-            this.router.navigate(['/competition/competitions-list']);
-          } else {
-            this.router.navigate(['/']);
-          }
-        }, 200);
+          console.log(Response);
+          localStorage.setItem('token', JSON.stringify(Response));
+          const userRole = this.authService.getUserRole();
+          this.successMessage = 'Login successful! Redirecting...';
+          setTimeout(() => {
+              if (userRole === 'breeder') {
+                  this.router.navigate(['/pigeon/pigeonsList']);
+              } else if (userRole === 'organizer') {
+                  this.router.navigate(['/competition/competitions-list']);
+              } else {
+                  this.router.navigate(['/']);
+              }
+          }, 200);
       },
       error: (error) => {
-        this.errorMessage = error.error.message || 'login failed. Please try again';
-        this.isSubmitting = false;
+          this.errorMessage = error.error.message || 'login failed. Please try again';
+          this.isSubmitting = false;
       }
     });
-  }
+}
 
   get f() {
     return this.loginForm.controls;
