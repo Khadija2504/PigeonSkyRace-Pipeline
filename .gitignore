@@ -11,6 +11,9 @@
 npm-debug.log
 yarn-error.log
 
+# Ignore node_modules directory
+node_modules/
+
 # IDEs and editors
 .idea/
 .project
