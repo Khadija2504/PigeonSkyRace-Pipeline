@@ -1,20 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { LoginComponent } from './login.component';
 import { of, throwError } from 'rxjs';
 import { fakeAsync, tick } from '@angular/core/testing';
-=======
-
-import { LoginComponent } from './login.component';
->>>>>>> ce66958e6edbd29bd845bb17be9a35067f12a61b
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-<<<<<<< HEAD
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let routerSpy: jasmine.SpyObj<Router>;
 
@@ -30,21 +24,12 @@ describe('LoginComponent', () => {
         { provide: Router, useValue: routerSpy },
       ],
     }).compileComponents();
-=======
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [LoginComponent]
-    })
-    .compileComponents();
->>>>>>> ce66958e6edbd29bd845bb17be9a35067f12a61b
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-<<<<<<< HEAD
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
@@ -127,9 +112,4 @@ describe('LoginComponent', () => {
 
     expect(component.successMessage).toBe('Login successful! Redirecting...');
   });
-=======
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
->>>>>>> ce66958e6edbd29bd845bb17be9a35067f12a61b
 });

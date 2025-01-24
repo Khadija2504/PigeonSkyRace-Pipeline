@@ -1,14 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-=======
-
->>>>>>> ce66958e6edbd29bd845bb17be9a35067f12a61b
 import { PigeonService } from './pigeon.service';
 
 describe('PigeonService', () => {
   let service: PigeonService;
-<<<<<<< HEAD
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
@@ -23,18 +18,11 @@ describe('PigeonService', () => {
   afterEach(() => {
     httpMock.verify();
     localStorage.clear();
-=======
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(PigeonService);
->>>>>>> ce66958e6edbd29bd845bb17be9a35067f12a61b
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-<<<<<<< HEAD
 
   describe('getToken', () => {
     it('should return token from localStorage', () => {
@@ -90,6 +78,3 @@ describe('PigeonService', () => {
     });
   });
 });
-=======
-});
->>>>>>> ce66958e6edbd29bd845bb17be9a35067f12a61b
