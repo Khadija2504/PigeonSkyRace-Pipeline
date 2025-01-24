@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+<<<<<<< HEAD
 import { AuthService } from './auth.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
@@ -18,11 +19,23 @@ describe('AuthService', () => {
   afterEach(() => {
     httpMock.verify(); // Verify no outstanding HTTP requests
     localStorage.clear(); // Clear localStorage after each test
+=======
+
+import { AuthService } from './auth.service';
+
+describe('AuthService', () => {
+  let service: AuthService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(AuthService);
+>>>>>>> ce66958e6edbd29bd845bb17be9a35067f12a61b
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+<<<<<<< HEAD
 
   describe('register', () => {
     it('should send a POST request to register the user', () => {
@@ -131,4 +144,6 @@ describe('AuthService', () => {
       expect(localStorage.getItem('token')).toBeNull();
     });
   });
+=======
+>>>>>>> ce66958e6edbd29bd845bb17be9a35067f12a61b
 });
