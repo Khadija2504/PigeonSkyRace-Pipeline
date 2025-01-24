@@ -1,116 +1,89 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { LoginComponent } from './login.component';
-import { of, throwError } from 'rxjs';
-import { fakeAsync, tick } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+describe('Login Component', () => {
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let routerSpy: jasmine.SpyObj<Router>;
-
-  beforeEach(async () => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['login', 'getUserRole']);
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-
-    await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, FormsModule, HttpClientTestingModule],
-      declarations: [LoginComponent],
-      providers: [
-        { provide: AuthService, useValue: authServiceSpy },
-        { provide: Router, useValue: routerSpy },
-      ],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    cy.visit('/auth/login');
   });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
+  it('should render the login form correctly', () => {
+    cy.get('form').should('exist');
+    cy.get('input[name="email"]').should('exist').and('have.attr', 'type', 'email');
+    cy.get('input[name="password"]').should('exist').and('have.attr', 'type', 'password');
+    cy.get('button[type="submit"]').should('exist').and('contain', 'Login');
   });
 
-  it('should initialize the login form', () => {
-    const form = component.loginForm;
-    expect(form).toBeDefined();
-    expect(form.controls['email'].value).toBe('');
-    expect(form.controls['password'].value).toBe('');
+  it('should validate the login form', () => {
+    cy.get('button[type="submit"]').click();
+
+    cy.get('input[name="email"]')
+      .parent()
+      .should('contain', 'Valid email is required.');
+
+    cy.get('input[name="password"]')
+      .parent()
+      .should('contain', 'Password must be at least 6 characters.');
+
+    cy.get('input[name="email"]').clear().type('invalid-email');
+    cy.get('button[type="submit"]').click();
+    cy.get('input[name="email"]')
+      .parent()
+      .should('contain', 'Valid email is required.');
+
+    cy.get('input[name="password"]').clear().type('123');
+    cy.get('button[type="submit"]').click();
+    cy.get('input[name="password"]')
+      .parent()
+      .should('contain', 'Password must be at least 6 characters.');
   });
 
-  it('should validate the form correctly', () => {
-    component.loginForm.controls['email'].setValue('test@example.com');
-    component.loginForm.controls['password'].setValue('password123');
-    expect(component.loginForm.valid).toBeTrue();
+  it('should successfully login with valid credentials and redirect based on role', () => {
+    cy.intercept('POST', '/api/auth/login', {
+      statusCode: 200,
+      body: { token: 'mock-token' },
+    }).as('loginRequest');
+
+    cy.intercept('GET', '/api/auth/role', {
+      statusCode: 200,
+      body: { role: 'breeder' },
+    }).as('roleRequest');
+
+    cy.get('input[name="email"]').type('test@example.com');
+    cy.get('input[name="password"]').type('password123');
+    cy.get('button[type="submit"]').click();
+
+    cy.wait('@loginRequest').its('response.statusCode').should('eq', 200);
+    cy.wait('@roleRequest').its('response.statusCode').should('eq', 200);
+    cy.contains('Login successful! Redirecting...').should('exist');
+    cy.url().should('eq', `${Cypress.config().baseUrl}/pigeon/pigeonsList`);
   });
 
-  it('should not call login API if the form is invalid', () => {
-    component.loginForm.controls['email'].setValue('');
-    component.login();
+  it('should show an error message for invalid credentials', () => {
+    cy.intercept('POST', '/api/auth/login', {
+      statusCode: 401,
+      body: { message: 'Invalid email or password' },
+    }).as('loginRequest');
 
-    expect(authServiceSpy.login).not.toHaveBeenCalled();
+    cy.get('input[name="email"]').type('wrong@example.com');
+    cy.get('input[name="password"]').type('wrongpassword');
+    cy.get('button[type="submit"]').click();
+
+    cy.wait('@loginRequest').its('response.statusCode').should('eq', 401);
+    cy.contains('Invalid email or password').should('exist');
   });
 
-  it('should call login API and navigate on valid form submission for breeder role', fakeAsync(() => {
-    component.loginForm.controls['email'].setValue('test@example.com');
-    component.loginForm.controls['password'].setValue('password123');
+  it('should disable submit button while submitting', () => {
+    cy.get('input[name="email"]').type('test@example.com');
+    cy.get('input[name="password"]').type('password123');
 
-    authServiceSpy.login.and.returnValue(of({ token: 'dummy-token' }));
-    authServiceSpy.getUserRole.and.returnValue('breeder');
+    cy.intercept('POST', '/api/auth/login', {
+      delay: 1000,
+      body: { token: 'mock-token' },
+      statusCode: 200,
+    }).as('loginRequest');
 
-    component.login();
-    tick();
-
-    expect(authServiceSpy.login).toHaveBeenCalledWith({
-      email: 'test@example.com',
-      password: 'password123',
-    });
-    expect(authServiceSpy.getUserRole).toHaveBeenCalled();
-  }));
-
-  it('should call login API and navigate on valid form submission for organizer role', fakeAsync(() => {
-    component.loginForm.controls['email'].setValue('test@example.com');
-    component.loginForm.controls['password'].setValue('password123');
-
-    authServiceSpy.login.and.returnValue(of({ token: 'dummy-token' }));
-    authServiceSpy.getUserRole.and.returnValue('organizer');
-
-    component.login();
-    tick();
-
-    expect(authServiceSpy.login).toHaveBeenCalledWith({
-      email: 'test@example.com',
-      password: 'password123',
-    });
-    expect(authServiceSpy.getUserRole).toHaveBeenCalled();
-  }));
-
-  it('should handle login errors correctly', () => {
-    const errorResponse = { error: { message: 'Invalid credentials' } };
-    authServiceSpy.login.and.returnValue(throwError(() => errorResponse));
-
-    component.loginForm.controls['email'].setValue('test@example.com');
-    component.loginForm.controls['password'].setValue('wrongpassword');
-
-    component.login();
-
-    expect(component.errorMessage).toBe('Invalid credentials');
-    expect(component.isSubmitting).toBeFalse();
+    cy.get('button[type="submit"]').should('not.be.disabled').click();
+    cy.get('button[type="submit"]').should('be.disabled');
+    cy.wait('@loginRequest');
+    cy.get('button[type="submit"]').should('not.be.disabled');
   });
 
-  it('should display success message and navigate to default route for other roles', () => {
-    component.loginForm.controls['email'].setValue('test@example.com');
-    component.loginForm.controls['password'].setValue('password123');
-
-    authServiceSpy.login.and.returnValue(of({ token: 'dummy-token' }));
-    authServiceSpy.getUserRole.and.returnValue('other');
-
-    component.login();
-
-    expect(component.successMessage).toBe('Login successful! Redirecting...');
-  });
 });
