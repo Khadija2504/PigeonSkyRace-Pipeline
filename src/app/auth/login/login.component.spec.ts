@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { LoginComponent } from './login.component';
 import { of, throwError } from 'rxjs';
 import { fakeAsync, tick } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -17,7 +18,7 @@ describe('LoginComponent', () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, FormsModule],
+      imports: [ReactiveFormsModule, FormsModule, HttpClientTestingModule],
       declarations: [LoginComponent],
       providers: [
         { provide: AuthService, useValue: authServiceSpy },

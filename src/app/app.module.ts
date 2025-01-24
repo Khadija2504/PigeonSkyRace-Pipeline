@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
-import { LogoutComponent } from './auth/logout/logout.component'
 
 @NgModule({
   declarations: [
@@ -14,8 +13,7 @@ import { LogoutComponent } from './auth/logout/logout.component'
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
-    LogoutComponent
+    HttpClientModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
