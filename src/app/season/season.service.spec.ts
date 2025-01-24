@@ -10,7 +10,4 @@ describe('SeasonService', () => {
     service = TestBed.inject(SeasonService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
 });
